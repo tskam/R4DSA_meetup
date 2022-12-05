@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>R4DSA meetup - Randomisation Inference Statistics: infer methods</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">R4DSA meetup</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-nov-dev-2022" role="button" data-bs-toggle="dropdown" aria-expanded="false">Nov-Dev 2022</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-nov-dev-2022">    
+        <li>
+    <a class="dropdown-item" href="../nov2022/TidyModels1.html">
+ <span class="dropdown-text">Randomisation Inference Statistics</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">About</a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#enter-infer-a-tidy-inference-statistics" id="toc-enter-infer-a-tidy-inference-statistics" class="nav-link" data-scroll-target="#enter-infer-a-tidy-inference-statistics">Enter infer: A tidy inference statistics</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The Data</a></li>
+  <li><a href="#installing-and-loading-packages" id="toc-installing-and-loading-packages" class="nav-link" data-scroll-target="#installing-and-loading-packages">Installing and Loading Packages</a>
+  <ul class="collapse">
+  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data">Importing data</a></li>
+  </ul></li>
+  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a>
+  <ul class="collapse">
+  <li><a href="#summary-statistics" id="toc-summary-statistics" class="nav-link" data-scroll-target="#summary-statistics">Summary statistics</a></li>
+  </ul></li>
+  <li><a href="#two-sample-mean-test-with-randomisation-inference-statistics-infer-method" id="toc-two-sample-mean-test-with-randomisation-inference-statistics-infer-method" class="nav-link" data-scroll-target="#two-sample-mean-test-with-randomisation-inference-statistics-infer-method">Two-sample Mean Test with Randomisation Inference Statistics: infer method</a>
+  <ul class="collapse">
+  <li><a href="#specify-variables" id="toc-specify-variables" class="nav-link" data-scroll-target="#specify-variables"><code>specify</code> variables</a></li>
+  <li><a href="#hypothesize-the-null" id="toc-hypothesize-the-null" class="nav-link" data-scroll-target="#hypothesize-the-null"><code>hypothesize</code> the null</a></li>
+  <li><a href="#generate-replicates" id="toc-generate-replicates" class="nav-link" data-scroll-target="#generate-replicates"><code>generate</code> replicates</a></li>
+  <li><a href="#calculate-summary-statistics" id="toc-calculate-summary-statistics" class="nav-link" data-scroll-target="#calculate-summary-statistics"><code>calculate</code> summary statistics</a></li>
+  <li><a href="#visualize-the-p-value" id="toc-visualize-the-p-value" class="nav-link" data-scroll-target="#visualize-the-p-value"><code>visualize</code> the p-value</a></li>
+  </ul></li>
+  <li><a href="#confident-interval" id="toc-confident-interval" class="nav-link" data-scroll-target="#confident-interval">Confident interval</a></li>
+  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">Reference</a>
+  <ul class="collapse">
+  <li><a href="#randomisation-inferential-statistics" id="toc-randomisation-inferential-statistics" class="nav-link" data-scroll-target="#randomisation-inferential-statistics">Randomisation Inferential Statistics</a></li>
+  <li><a href="#infer" id="toc-infer" class="nav-link" data-scroll-target="#infer">infer</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Randomisation Inference Statistics: infer methods</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>In ISSS602 Data Analytics Lab, we shared with you a collection of conventional inference statistical methods such as two-sample mean test, ANOVA test and Chi-square test, just to name a few of them. These methods are very popular and their use is widespread, but this does not mean they are always the best tool for doing confirmatory data analysis on business and market research data.</p>
+<p>Figure below shows that there is indeed another alternative approach to perform confirmatory data analysis called <strong>randomisation inference</strong> (Enclosed with blue in the flow diagram).</p>
+<p><img src="img/image1-0.jpg" class="img-fluid"></p>
+<p>Note: The subsequent explanation draw extensively from A blog by Allen Downey entitle <a href="http://allendowney.blogspot.com/2016/06/there-is-still-only-one-test.html">There is still only one test</a></p>
+<p>Different from conventional inference statistical test whereby given a dataset, we will compute a test statistic that measures the size of the apparent effect. For example, if we are describing a difference between two groups, the test statistic might be the absolute difference in means.</p>
+<p>We will then formulate a null hypothesis, which is a model of the world under the assumption that the effect is not real; for example, if we think there might be a difference between two groups, the null hypothesis would assume that there is no difference.</p>
+<p>Next, we will compute a p-value, which is the probability of seeing an effect as big as𝛿under the null hypothesis.</p>
+<p>On the other hand, if randomisation inference test approach is used, we will estimate the p-value by using our model of the null hypothesis to generate many simulated datasets. For each simulated dataset, we will compute the same test statistic we used on the actual data. Finally, we will count the fraction of times the test statistic from simulated data exceeds𝛿. This fraction approximates the p-value. If it’s sufficiently small, we can conclude that the apparent effect is unlikely to be due to chance.</p>
+<p>For more detail discussion of randomisation inference statistics, please refer to Chapter 11-22 of <a href="https://openintro-ims.netlify.app/index.html">Introduction to Modern Statistics</a> or Chapter 2-4 of <a href="https://openintro-ims.netlify.app/">Introductory Statistic with Randomization and Simulation</a></p>
+</section>
+<section id="enter-infer-a-tidy-inference-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="enter-infer-a-tidy-inference-statistics">Enter infer: A tidy inference statistics</h2>
+<p>In the nutshell, <a href="https://infer.netlify.app/index.html">infer</a> is an R package specially designed for data analyst to perform randomisation inference statistics by using an expressive statistical grammar that coheres with the tidyverse design framework.</p>
+<p>Figure below shows the five main verbs of infer package. They are:</p>
+<ul>
+<li><code>specify()</code> allows us to specify the variable, or relationship between variables, that you’re interested in.</li>
+<li><code>hypothesize()</code> allows us to declare the null hypothesis.</li>
+<li><code>generate()</code> allows us to generate data reflecting the null hypothesis.</li>
+<li><code>calculate()</code> allows us to calculate a distribution of statistics from the generated data to form the null distribution.</li>
+<li><code>visualise()</code> allows us to visualize the distribution of the simulation-based inferential statistics or the theoretical distribution (or both!).</li>
+</ul>
+<p><img src="img/image1-3.jpg" class="img-fluid"></p>
+</section>
+<section id="the-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-data">The Data</h2>
+<p>For the purpose of this hands-on, a data set called Exam_data.csv will be used</p>
+<p>Figure below shows the content of the data. It consists of seven fields. They are:</p>
+<table class="table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field Name</th>
+<th>Description</th>
+<th>Data type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID</td>
+<td>Unique ID of student</td>
+<td>String</td>
+</tr>
+<tr class="even">
+<td>CLASS</td>
+<td>Class level</td>
+<td>String</td>
+</tr>
+<tr class="odd">
+<td>GENDER</td>
+<td>Gender of the student (i.e.&nbsp;Female, Male)</td>
+<td>String</td>
+</tr>
+<tr class="even">
+<td>RACE</td>
+<td>Race of student (i.e.&nbsp;Chinese, Indian, Malay and others)</td>
+<td>String</td>
+</tr>
+<tr class="odd">
+<td>ENGLISH</td>
+<td>English scores</td>
+<td>Numeric</td>
+</tr>
+<tr class="even">
+<td>MATHS</td>
+<td>Maths scores</td>
+<td>Numeric</td>
+</tr>
+<tr class="odd">
+<td>SCIENCE</td>
+<td>Science scores</td>
+<td>Numeric</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="installing-and-loading-packages" class="level2">
+<h2 class="anchored" data-anchor-id="installing-and-loading-packages">Installing and Loading Packages</h2>
+<p>In this hands-on exercise, three R packages will be used. They are:</p>
+<ul>
+<li>readr for importing the csv file.</li>
+<li>ggplot2 for visualising the data.</li>
+<li>infer for performing randomisation inference statistics.</li>
+</ul>
+<p>However, instead of loading them one-by-one by using <code>library()</code>, <code>p_load()</code> of <a href="https://github.com/trinker/pacman"><strong>pacman</strong></a> package is used.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, infer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Also note that instead of loading readr and ggplot2, tidyverse is loaded. This is because tidyverse will load all the <a href="https://www.tidyverse.org/packages/">core tidyverse</a> packages that include readr and ggplot2.</p>
+<section id="importing-data" class="level3">
+<h3 class="anchored" data-anchor-id="importing-data">Importing data</h3>
+<p>In the code chunk below, read_csv() of readr is used to import Exam_data.csv into R environment and save it as a tibble data frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>exam <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Exam_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 322 Columns: 7
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (4): ID, CLASS, GENDER, RACE
+dbl (3): ENGLISH, MATHS, SCIENCE
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>exam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 322 × 7
+   ID         CLASS GENDER RACE    ENGLISH MATHS SCIENCE
+   &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1 Student321 3I    Male   Malay        21     9      15
+ 2 Student305 3I    Female Malay        24    22      16
+ 3 Student289 3H    Male   Chinese      26    16      16
+ 4 Student227 3F    Male   Chinese      27    77      31
+ 5 Student318 3I    Male   Malay        27    11      25
+ 6 Student306 3I    Female Malay        31    16      16
+ 7 Student313 3I    Male   Chinese      31    21      25
+ 8 Student316 3I    Male   Malay        31    18      27
+ 9 Student312 3I    Male   Malay        33    19      15
+10 Student297 3H    Male   Indian       34    49      37
+# … with 312 more rows</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="eda" class="level2">
+<h2 class="anchored" data-anchor-id="eda">EDA</h2>
+<p>In the code chunk below, ggplot2 is used to plot a boxplot with the mean values of both female and male students on their respective boxplots.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> MATHS, <span class="at">x=</span> GENDER)) <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">geom =</span> <span class="st">"point"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.y=</span><span class="st">"mean"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour =</span><span class="st">"red"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Maths scores"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The `fun.y` argument of `stat_summary()` is deprecated as of ggplot2 3.3.0.
+ℹ Please use the `fun` argument instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="TidyModels1_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The boxplot reveals that the mean Maths score of female students is slightly higer than the male students.</p>
+<section id="summary-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="summary-statistics">Summary statistics</h3>
+<p>To verify our observation, the code chunk below is used to derive the summary statistics of maths score by gender.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>exam <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(GENDER) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>(), </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_score =</span> <span class="fu">mean</span>(MATHS), </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">std_dev =</span> <span class="fu">sd</span>(MATHS))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  GENDER     n mean_score std_dev
+  &lt;chr&gt;  &lt;int&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+1 Female   170       70.0    18.7
+2 Male     152       68.6    21.4</code></pre>
+</div>
+</div>
+<p>Thing to learn from the code chunk above:</p>
+<ul>
+<li><code>group_by()</code> and <code>summarize()</code> of dplyr package is used to derive the summary statistics. This is why it is always useful to load the core packages of tidyverse because we can use them anytime we need them.</li>
+</ul>
+</section>
+</section>
+<section id="two-sample-mean-test-with-randomisation-inference-statistics-infer-method" class="level2">
+<h2 class="anchored" data-anchor-id="two-sample-mean-test-with-randomisation-inference-statistics-infer-method">Two-sample Mean Test with Randomisation Inference Statistics: infer method</h2>
+<p>With reference to the EDA and summary statistics analysis, the following hypothesis are formulated.</p>
+<p>H0: There is no difference between the mean maths score of female and male students</p>
+<p>H1: The mean maths scores of female and male students are different.</p>
+<p>For the purpose of this student, 95% confident interval will be used.</p>
+<section id="specify-variables" class="level3">
+<h3 class="anchored" data-anchor-id="specify-variables"><code>specify</code> variables</h3>
+<p>In the code chunk below, <a href="https://infer.netlify.app/reference/specify.html"><code>specify()</code></a> of <strong>infer</strong> package is used to define the formula and response and explanatory variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>exam <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">formula =</span> MATHS <span class="sc">~</span> GENDER)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: MATHS (numeric)
+Explanatory: GENDER (factor)
+# A tibble: 322 × 2
+   MATHS GENDER
+   &lt;dbl&gt; &lt;fct&gt; 
+ 1     9 Male  
+ 2    22 Female
+ 3    16 Male  
+ 4    77 Male  
+ 5    11 Male  
+ 6    16 Female
+ 7    21 Male  
+ 8    18 Male  
+ 9    19 Male  
+10    49 Male  
+# … with 312 more rows</code></pre>
+</div>
+</div>
+<p>Things to learn from the code chunk above:</p>
+<ul>
+<li>the input must be in tibble data frame format.</li>
+<li>the response variable is maths score.</li>
+<li>the explanatory variable is gender.</li>
+</ul>
+</section>
+<section id="hypothesize-the-null" class="level3">
+<h3 class="anchored" data-anchor-id="hypothesize-the-null"><code>hypothesize</code> the null</h3>
+<p>For the purpose of this case study, We set the null hypothesis <span class="math inline">\(H0: \hatμ_f−\hatμ_m = 0\)</span> by using the <a href="https://infer.netlify.app/reference/hypothesize.html"><code>hypothesize()</code></a> infer package. Since we have two samples, female and male students, we set <code>null</code> to be <code>"independence"</code> as we described in Section <a href="https://moderndive.com/9-hypothesis-testing.html#ht-infer">9.3</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>exam <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">formula =</span> MATHS <span class="sc">~</span> GENDER) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: MATHS (numeric)
+Explanatory: GENDER (factor)
+Null Hypothesis: independence
+# A tibble: 322 × 2
+   MATHS GENDER
+   &lt;dbl&gt; &lt;fct&gt; 
+ 1     9 Male  
+ 2    22 Female
+ 3    16 Male  
+ 4    77 Male  
+ 5    11 Male  
+ 6    16 Female
+ 7    21 Male  
+ 8    18 Male  
+ 9    19 Male  
+10    49 Male  
+# … with 312 more rows</code></pre>
+</div>
+</div>
+<p>Things to learn from the code chunk above:</p>
+<ul>
+<li>We set this null hypothesis H0 in our infer workflow using the null argument of the <code>hypothesize()</code> function <strong>independence</strong> for hypotheses involving two samples. If the hypotheses involving a single sample, then <strong>point</strong> should be used.</li>
+<li>The data has not changed yet. This will occur at the upcoming <code>generate()</code> step; we’re merely setting meta-data for now.</li>
+</ul>
+</section>
+<section id="generate-replicates" class="level3">
+<h3 class="anchored" data-anchor-id="generate-replicates"><code>generate</code> replicates</h3>
+<p>After we <code>hypothesize()</code> the null hypothesis, we <a href="https://infer.netlify.app/reference/generate.html"><code>generate()</code></a> replicates of “shuffled” datasets assuming the null hypothesis is true. We do this by repeating the shuffling exercise several times. The <code>type</code> argument determines the method used to create the null distribution. They are three types of rendomisation/permutation methods available. They are:</p>
+<ul>
+<li><code>bootstrap</code>: A bootstrap sample will be drawn for each replicate, where a sample of size equal to the input sample size is drawn (with replacement) from the input sample data.</li>
+<li><code>permute</code>: For each replicate, each input value will be randomly reassigned (without replacement) to a new output value in the sample.</li>
+<li><code>draw</code>: A value will be sampled from a theoretical distribution with parameter p specified in <code>hypothesize()</code> for each replicate. This option is currently only applicable for testing on one proportion. This generation type was previously called <code>simulate</code>, which has been superseded.</li>
+</ul>
+<p>In the code chunk below, we replicates the data 1000 times by using <code>permute</code> method.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>exam_permute <span class="ot">&lt;-</span> exam <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">formula =</span> MATHS <span class="sc">~</span> GENDER) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"permute"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>exam_permute</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: MATHS (numeric)
+Explanatory: GENDER (factor)
+Null Hypothesis: independence
+# A tibble: 322,000 × 3
+# Groups:   replicate [1,000]
+   MATHS GENDER replicate
+   &lt;dbl&gt; &lt;fct&gt;      &lt;int&gt;
+ 1    97 Male           1
+ 2    64 Female         1
+ 3    66 Male           1
+ 4    63 Male           1
+ 5    58 Male           1
+ 6    74 Female         1
+ 7    68 Male           1
+ 8    88 Male           1
+ 9    47 Male           1
+10    87 Male           1
+# … with 321,990 more rows</code></pre>
+</div>
+</div>
+<p>Thing to learn from the code chunk above.</p>
+<ul>
+<li><code>set.seed()</code> is used to ensure that the ramdomisation is reproducible.</li>
+</ul>
+<p>Note that the resulting data frame has 322,000 rows. This is because we performed permutations for each of the 322 rows 1000 times and 322,000 = 322 x 1000. If you explore the exam_permute data frame with <code>View()</code>, you’ll notice that the variable replicate indicates which resample each row belongs to. So it has the value 1 322 times, the value 2 322 times, all the way through to the value 1000 322 times.</p>
+</section>
+<section id="calculate-summary-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="calculate-summary-statistics"><code>calculate</code> summary statistics</h3>
+<p>Now, we are going to calculate the appropriate summary statistic for each of our 1000 shuffles by using <a href="https://infer.netlify.app/reference/calculate.html"><code>calculate()</code></a> of <strong>infer</strong> package. <code>stat</code> argument of <code>calculate()</code> will be used to specify the summary statistic used.</p>
+<p>In the code chunk below, <em>“diff in means”</em> is used.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>null_distribution_maths <span class="ot">&lt;-</span> exam <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">formula =</span> MATHS <span class="sc">~</span> GENDER) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"permute"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in means"</span>, </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>null_distribution_maths</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: MATHS (numeric)
+Explanatory: GENDER (factor)
+Null Hypothesis: independence
+# A tibble: 1,000 × 2
+   replicate   stat
+       &lt;int&gt;  &lt;dbl&gt;
+ 1         1 -6.12 
+ 2         2  3.12 
+ 3         3 -4.13 
+ 4         4 -6.67 
+ 5         5  1.46 
+ 6         6 -1.35 
+ 7         7  0.467
+ 8         8  1.64 
+ 9         9 -1.99 
+10        10  1.64 
+# … with 990 more rows</code></pre>
+</div>
+</div>
+<p>Note that we have 1000 values of <code>stat</code>, each representing one instance of <span class="math inline">\(H0: \hatμ_f−\hatμ_m = 0\)</span> in a hypothesized world of no gender difference in maths scores. Observe as well that we chose the name of this data frame carefully: <code>null_distribution</code>.</p>
+<p>What was the <em>observed</em> difference in promotion rates? In other words, what was the <em>observed test statistic</em> <span class="math inline">\(H0: \hatμ_f−\hatμ_m = 0\)</span>. In the code chunk below, we compute this value using the previous <code>infer</code> code but with the <code>hypothesize()</code> and <code>generate()</code> steps removed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>obs_diff_means <span class="ot">&lt;-</span> exam <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">formula =</span> MATHS <span class="sc">~</span> GENDER) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in means"</span>, </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>obs_diff_means</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: MATHS (numeric)
+Explanatory: GENDER (factor)
+# A tibble: 1 × 1
+   stat
+  &lt;dbl&gt;
+1  1.40</code></pre>
+</div>
+</div>
+</section>
+<section id="visualize-the-p-value" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-p-value"><code>visualize</code> the p-value</h3>
+<p>Finally, it comes the verdict or more popularly known as statistical conclusion. In this step, we want to measure how surprised we are by a promotion difference of 1.402012 in a hypothesized universe of there are not different between the maths scores of female and male students. If the observed difference of 1.402012 is highly unlikely, then we would be inclined to reject the validity of our hypothesized universe.</p>
+<p>In the code chunk below,</p>
+<ul>
+<li><a href="https://infer.netlify.app/reference/visualize.html"><code>visualise()</code></a> is used to plot the null distribution of our 1000 values of <img src="img/image1-6.jpg" class="img-fluid" width="57">,</li>
+<li><a href="https://infer.netlify.app/reference/visualize.html"><code>shade_p_value()</code></a> function with <code>obs_stat</code> argument set to the observed test statistic value we saved in <em>obs_diff_mean</em>.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visualize</span>(null_distribution_maths, </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">bins =</span> <span class="dv">10</span>) <span class="sc">+</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shade_p_value</span>(<span class="at">obs_stat =</span> obs_diff_means,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">direction =</span> <span class="st">"both"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="TidyModels1_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>With reference to the figure above, the solid dark red line marks 1.402012. However, what does the shaded-region correspond to? This is the p-value. Recall the definition of the p</p>
+<blockquote class="blockquote">
+<p>p-value is the probability of obtaining a test statistic just as or more extreme than the observed test statistic assuming the null hypothesis H0 is true.</p>
+</blockquote>
+<p>So judging by the shaded region in the figure above, it seems that the p-value is larger than the 0.05 critical values. Hence, we failed to reject this hypothesized universe, or using statistical language we “<em>do not have sufficient statistical evident to reject the null hypothesis</em>”.</p>
+<p>Oftentimes, we would like to find out what fraction of the null distribution is shaded? In other words, what is the exact value of the p-value? In the code chunk below, <code>get_p_value()</code> function with the same arguments as the previous <code>shade_p_value()</code> is used to derive the answer for this question.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>null_distribution_maths <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_p_value</span>(<span class="at">obs_stat =</span> obs_diff_means,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">direction =</span> <span class="st">"both"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  p_value
+    &lt;dbl&gt;
+1   0.496</code></pre>
+</div>
+</div>
+<p>Keeping the definition of a p-value in mind, the probability of observing a difference in mean maths score between female and male students as large as 1.402012 due to sampling variation alone in the null distribution is 0.59 = 59%. Since this p-value is larger than our pre-specified significance level α = 0.05, we failed to reject the null hypothesis <span class="math inline">\(H0: \hatμ_f−\hatμ_m = 0\)</span>. In other words, this p-value is not sufficiently small to reject our hypothesised universe of the mean maths scores of female and male students are the same. In conclusion, we do not have enough statistical evidence to change our mind in favor of the mean maths scores of female and male students are not the same.</p>
+</section>
+</section>
+<section id="confident-interval" class="level2">
+<h2 class="anchored" data-anchor-id="confident-interval">Confident interval</h2>
+<p>In this section, you will learn how to use functions provide by infer package to perform confident interval</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>exam <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">response =</span> MATHS) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"mean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: MATHS (numeric)
+# A tibble: 1 × 1
+   stat
+  &lt;dbl&gt;
+1  69.3</code></pre>
+</div>
+</div>
+<p>specify variables</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>exam <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">response =</span> MATHS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: MATHS (numeric)
+# A tibble: 322 × 1
+   MATHS
+   &lt;dbl&gt;
+ 1     9
+ 2    22
+ 3    16
+ 4    77
+ 5    11
+ 6    16
+ 7    21
+ 8    18
+ 9    19
+10    49
+# … with 312 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>exam <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">formula =</span> MATHS <span class="sc">~</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: MATHS (numeric)
+# A tibble: 322 × 1
+   MATHS
+   &lt;dbl&gt;
+ 1     9
+ 2    22
+ 3    16
+ 4    77
+ 5    11
+ 6    16
+ 7    21
+ 8    18
+ 9    19
+10    49
+# … with 312 more rows</code></pre>
+</div>
+</div>
+<p>generate replicates</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>exam <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">response =</span> MATHS) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"bootstrap"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: MATHS (numeric)
+# A tibble: 322,000 × 2
+# Groups:   replicate [1,000]
+   replicate MATHS
+       &lt;int&gt; &lt;dbl&gt;
+ 1         1    66
+ 2         1    63
+ 3         1    88
+ 4         1    79
+ 5         1    85
+ 6         1    85
+ 7         1    77
+ 8         1    85
+ 9         1    69
+10         1    85
+# … with 321,990 more rows</code></pre>
+</div>
+</div>
+<p>calculate summary statistics</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>bootstrap_distribution <span class="ot">&lt;-</span> exam <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">response =</span> MATHS) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"mean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting `type = "bootstrap"` in `generate()`.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>bootstrap_distribution</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: MATHS (numeric)
+# A tibble: 1,000 × 2
+   replicate  stat
+       &lt;int&gt; &lt;dbl&gt;
+ 1         1  68.4
+ 2         2  68.4
+ 3         3  68.8
+ 4         4  69.9
+ 5         5  71.0
+ 6         6  70.0
+ 7         7  69.7
+ 8         8  69.8
+ 9         9  68.9
+10        10  69.2
+# … with 990 more rows</code></pre>
+</div>
+</div>
+<p>visualize the results</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visualize</span>(bootstrap_distribution)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="TidyModels1_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>percentile_ci <span class="ot">&lt;-</span> bootstrap_distribution <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_confidence_interval</span>(<span class="at">level =</span> <span class="fl">0.95</span>, <span class="at">type =</span> <span class="st">"percentile"</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>percentile_ci</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  lower_ci upper_ci
+     &lt;dbl&gt;    &lt;dbl&gt;
+1     67.1     71.5</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visualize</span>(bootstrap_distribution) <span class="sc">+</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shade_confidence_interval</span>(<span class="at">endpoints =</span> percentile_ci)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="TidyModels1_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>standard_error_ci <span class="ot">&lt;-</span> bootstrap_distribution <span class="sc">%&gt;%</span>  </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_confidence_interval</span>(<span class="at">type =</span> <span class="st">"se"</span>, <span class="at">point_estimate =</span> x_bar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="reference" class="level2">
+<h2 class="anchored" data-anchor-id="reference">Reference</h2>
+<section id="randomisation-inferential-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="randomisation-inferential-statistics">Randomisation Inferential Statistics</h3>
+<ul>
+<li><p><a href="http://allendowney.blogspot.com/2016/06/there-is-still-only-one-test.html">There is still only one test</a></p></li>
+<li><p><a href="https://openintro-ims.netlify.app/index.html">Introduction to Modern Statistics</a> Chapter 11-22.</p></li>
+<li><p><a href="https://openintro-ims.netlify.app/">Introductory Statistic with Randomization and Simulation</a> Chapter 2-4.</p></li>
+</ul>
+</section>
+<section id="infer" class="level3">
+<h3 class="anchored" data-anchor-id="infer">infer</h3>
+<p>rstudio::conf 2018 <a href="https://www.rstudio.com/resources/rstudioconf-2018/infer-a-package-for-tidy-statistical-inference/">infer: a package for tidy statistical inference</a></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
