@@ -1,0 +1,5 @@
+---
+title: "Building Better Predictive Models with R"
+author: "Dr. Kam Tin Seong"
+editor: visual
+---

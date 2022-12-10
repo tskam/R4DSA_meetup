@@ -9,6 +9,8 @@ website:
         menu: 
           - text: Randomisation Inference Statistics
             href: nov2022/TidyModels1.qmd
+          - text: Building Better Predictive Model
+            href: nov2022/TidyModels2.pdf
     right:
       - href: index.qmd
         text: Home
