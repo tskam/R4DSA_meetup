@@ -11,6 +11,10 @@ website:
             href: nov2022/TidyModels1.qmd
           - text: Building Better Predictive Model
             href: nov2022/TidyModels2.pdf
+      - text: Bite-Sized Library Workshop
+        menu: 
+          - text: Episode 2 tidyverse methods
+            href: SMULibR/Episode02-tidyverse_methods.qmd
     right:
       - href: index.qmd
         text: Home
